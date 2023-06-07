@@ -9,17 +9,12 @@ from curses_tools import draw_frame, get_frame_size, read_controls
 from read_rocket_frame import read_rocket_frame
 
 
-STEP_UP = 1
-STEP_DOWN = 1
-STEP_RIGHT = 1
-STEP_LEFT = 1
-
+ROCKET_STEP = 1
 COUNT_STARTS = 100
 SYMBOLS = '+*.:'
 
 
-async def fire(canvas, start_row, start_column, rows_speed=-0.3,
-               columns_speed=0):
+async def fire(canvas, start_row, start_column, rows_speed=-0.3, columns_speed=0):
     """Display animation of gun shot, direction and speed can be specified."""
 
     row, column = start_row, start_column
@@ -65,7 +60,7 @@ async def animate_spaceship(
     for rocket_frame in cycle((rocket_frame_start, rocket_frame_finish)):
         canvas.nodelay(True)
         rows_direction, columns_direction, space_pressed = read_controls(
-            canvas, STEP_UP, STEP_DOWN, STEP_RIGHT, STEP_LEFT
+            canvas, ROCKET_STEP
         )
         size_rocket_rows, size_rocket_columns = get_frame_size(rocket_frame)
 

@@ -5,7 +5,7 @@ UP_KEY_CODE = 259
 DOWN_KEY_CODE = 258
 
 
-def read_controls(canvas, STEP_UP, STEP_DOWN, STEP_RIGHT, STEP_LEFT):
+def read_controls(canvas, ROCKET_STEP):
     """Read keys pressed and returns tuple witl controls state."""
 
     rows_direction = columns_direction = 0
@@ -19,16 +19,16 @@ def read_controls(canvas, STEP_UP, STEP_DOWN, STEP_RIGHT, STEP_LEFT):
             break
 
         if pressed_key_code == UP_KEY_CODE:
-            rows_direction = -STEP_UP
+            rows_direction = -ROCKET_STEP
 
         if pressed_key_code == DOWN_KEY_CODE:
-            rows_direction = STEP_DOWN
+            rows_direction = ROCKET_STEP
 
         if pressed_key_code == RIGHT_KEY_CODE:
-            columns_direction = STEP_RIGHT
+            columns_direction = ROCKET_STEP
 
         if pressed_key_code == LEFT_KEY_CODE:
-            columns_direction = -STEP_LEFT
+            columns_direction = -ROCKET_STEP
 
         if pressed_key_code == SPACE_KEY_CODE:
             space_pressed = True
