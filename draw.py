@@ -119,11 +119,11 @@ def run(rocket_frame_first, rocket_frame_second, canvas):
     while True:
 
         for second in sleep_time:
-            try:
-                for coroutine in coroutines:
+            for coroutine in coroutines:
+                try:
                     coroutine.send(None)
-            except StopIteration:
-                coroutines.remove(coroutine)
+                except StopIteration:
+                    coroutines.remove(coroutine)
             canvas.border()
             curses.curs_set(False)
             canvas.refresh()
