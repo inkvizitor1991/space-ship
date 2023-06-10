@@ -9,8 +9,9 @@ from curses_tools import draw_frame, get_frame_size, read_controls
 from read_rocket_frame import read_rocket_frame
 
 
+TIC_TIMEOUT = 0.1
 ROCKET_STEP = 1
-COUNT_STARTS = 100
+STARS = 100
 SYMBOLS = '+*.:'
 
 
@@ -44,12 +45,19 @@ async def fire(canvas, start_row, start_column, rows_speed=-0.3, columns_speed=0
         column += columns_speed
 
 
-async def blink(canvas, curses_state, row, column, symbol):
+async def blink(canvas, row, column, symbol):
+    curses_state = (
+        curses.A_DIM, curses.A_NORMAL,
+        curses.A_BOLD, curses.A_NORMAL
+    )
+    stars_tic_timeout = (2, 0.3, 0.5, 0.3)
 
     while True:
-        for state in curses_state:
+        for state, tic_timeout in zip(curses_state, stars_tic_timeout):
             canvas.addstr(row, column, symbol, state)
-            for number in range(random.randint(0, 5)):
+            for _ in range(int(tic_timeout/0.1)):
+                await asyncio.sleep(0)
+            for _ in range(random.randint(0, 5)):
                 await asyncio.sleep(0)
 
 
@@ -84,18 +92,14 @@ async def animate_spaceship(
 def create_coroutines(rocket_frame_start, rocket_frame_finish, canvas):
     row, column = canvas.getmaxyx()
     centre_row, centre_column = row // 2, column // 2
-    courses_state = (
-        curses.A_DIM, curses.A_NORMAL,
-        curses.A_BOLD, curses.A_NORMAL
-    )
 
     coroutines = [
         blink(
-            canvas, courses_state, random.randint(1, row - 1),
+            canvas, random.randint(1, row - 1),
             random.randint(1, column - 1),
             random.choice(SYMBOLS)
         )
-        for _ in range(COUNT_STARTS + 1)
+        for _ in range(STARS + 1)
     ]
 
     start_fire = fire(canvas, centre_row, centre_column)
@@ -111,23 +115,20 @@ def create_coroutines(rocket_frame_start, rocket_frame_finish, canvas):
 
 
 def run(rocket_frame_first, rocket_frame_second, canvas):
-    sleep_time = (2, 0.3, 0.5, 0.3)
     coroutines = create_coroutines(
         rocket_frame_first, rocket_frame_second, canvas
     )
 
     while True:
-
-        for second in sleep_time:
-            for coroutine in coroutines:
-                try:
-                    coroutine.send(None)
-                except StopIteration:
-                    coroutines.remove(coroutine)
-            canvas.border()
-            curses.curs_set(False)
-            canvas.refresh()
-            time.sleep(second)
+        for coroutine in coroutines:
+            try:
+                coroutine.send(None)
+            except StopIteration:
+                coroutines.remove(coroutine)
+        canvas.border()
+        curses.curs_set(False)
+        canvas.refresh()
+        time.sleep(TIC_TIMEOUT)
 
 
 if __name__ == '__main__':
