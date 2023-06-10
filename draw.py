@@ -8,7 +8,6 @@ from itertools import cycle
 from curses_tools import draw_frame, get_frame_size, read_controls
 from read_rocket_frame import read_rocket_frame
 
-
 TIC_TIMEOUT = 0.1
 ROCKET_STEP = 1
 STARS = 100
@@ -55,7 +54,7 @@ async def blink(canvas, row, column, symbol):
     while True:
         for state, tic_timeout in zip(curses_state, stars_tic_timeout):
             canvas.addstr(row, column, symbol, state)
-            for _ in range(int(tic_timeout/0.1)):
+            for _ in range(int(tic_timeout / 0.1)):
                 await asyncio.sleep(0)
             for _ in range(random.randint(0, 5)):
                 await asyncio.sleep(0)
@@ -65,7 +64,11 @@ async def animate_spaceship(
         canvas, rocket_frame_start, rocket_frame_finish,
         rocket_row, rocket_column, row, column):
 
-    for rocket_frame in cycle((rocket_frame_start, rocket_frame_finish)):
+    rocket_frames = (
+        rocket_frame_start, rocket_frame_start,
+        rocket_frame_finish, rocket_frame_finish
+    )
+    for rocket_frame in cycle(rocket_frames):
         canvas.nodelay(True)
         rows_direction, columns_direction, space_pressed = read_controls(
             canvas, ROCKET_STEP
