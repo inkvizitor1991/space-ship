@@ -76,16 +76,11 @@ async def animate_spaceship(
         )
         size_rocket_rows, size_rocket_columns = get_frame_size(rocket_frame)
 
-        state_column = rocket_column
-        state_row = rocket_row
         rocket_row += rows_direction
         rocket_column += columns_direction
 
-        if rocket_column + size_rocket_columns >= column or rocket_column <= 0:
-            rocket_column = state_column
-
-        if rocket_row + size_rocket_rows >= row or rocket_row <= 0:
-            rocket_row = state_row
+        rocket_row = max(1, min(rocket_row, row - size_rocket_rows))
+        rocket_column = max(1, min(rocket_column, column - size_rocket_columns))
 
         draw_frame(canvas, rocket_row, rocket_column, rocket_frame)
         await asyncio.sleep(0)
