@@ -126,7 +126,7 @@ def run(rocket_frame_first, rocket_frame_second, canvas):
     )
 
     while True:
-        for coroutine in coroutines:
+        for coroutine in coroutines.copy():
             try:
                 coroutine.send(None)
             except StopIteration:
