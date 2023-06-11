@@ -88,14 +88,15 @@ async def animate_spaceship(
 
 
 def create_coroutines(rocket_frame_start, rocket_frame_finish, canvas):
+    frame_size = 1
     height, width = canvas.getmaxyx()
     row, column = height - 1, width - 1
     centre_row, centre_column = row // 2, column // 2
 
     coroutines = [
         blink(
-            canvas, random.randint(1, row - 1),
-            random.randint(1, column - 1),
+            canvas, random.randint(frame_size, row - frame_size),
+            random.randint(frame_size, column - frame_size),
             random.choice(SYMBOLS)
         )
         for _ in range(STARS + 1)
