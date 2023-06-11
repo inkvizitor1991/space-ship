@@ -50,8 +50,9 @@ async def blink(canvas, row, column, symbol):
         curses.A_BOLD, curses.A_NORMAL
     )
     stars_tic_timeout = (2, 0.3, 0.5, 0.3)
+    offset_tics = random.randint(0, 10)
 
-    for _ in range(random.randint(0, 10)):
+    for _ in range(offset_tics):
         await asyncio.sleep(0)
 
     while True:
