@@ -71,7 +71,6 @@ async def animate_spaceship(
         rocket_frame_finish, rocket_frame_finish
     )
     for rocket_frame in cycle(rocket_frames):
-        canvas.nodelay(True)
         rows_direction, columns_direction, space_pressed = read_controls(
             canvas, ROCKET_STEP
         )
@@ -119,6 +118,9 @@ def create_coroutines(rocket_frame_start, rocket_frame_finish, canvas):
 
 
 def run(rocket_frame_first, rocket_frame_second, canvas):
+    canvas.nodelay(True)
+    curses.curs_set(False)
+    canvas.border()
     coroutines = create_coroutines(
         rocket_frame_first, rocket_frame_second, canvas
     )
@@ -129,8 +131,6 @@ def run(rocket_frame_first, rocket_frame_second, canvas):
                 coroutine.send(None)
             except StopIteration:
                 coroutines.remove(coroutine)
-        canvas.border()
-        curses.curs_set(False)
         canvas.refresh()
         time.sleep(TIC_TIMEOUT)
 
