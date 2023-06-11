@@ -93,7 +93,8 @@ async def animate_spaceship(
 
 
 def create_coroutines(rocket_frame_start, rocket_frame_finish, canvas):
-    row, column = canvas.getmaxyx()
+    height, width = canvas.getmaxyx()
+    row, column = height - 1, width - 1
     centre_row, centre_column = row // 2, column // 2
 
     coroutines = [
