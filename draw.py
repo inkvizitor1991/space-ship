@@ -58,7 +58,7 @@ async def blink(canvas, row, column, symbol):
     while True:
         for state, tic_timeout in zip(curses_state, stars_tic_timeout):
             canvas.addstr(row, column, symbol, state)
-            for _ in range(int(tic_timeout / 0.1)):
+            for _ in range(round(tic_timeout / 0.1)):
                 await asyncio.sleep(0)
 
 
