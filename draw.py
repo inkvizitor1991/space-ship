@@ -44,13 +44,12 @@ async def fire(canvas, start_row, start_column, rows_speed=-0.3, columns_speed=0
         column += columns_speed
 
 
-async def blink(canvas, row, column, symbol):
+async def blink(canvas, row, column, symbol, offset_tics):
     curses_state = (
         curses.A_DIM, curses.A_NORMAL,
         curses.A_BOLD, curses.A_NORMAL
     )
     stars_tic_timeout = (2, 0.3, 0.5, 0.3)
-    offset_tics = random.randint(0, 10)
 
     for _ in range(offset_tics):
         await asyncio.sleep(0)
@@ -88,6 +87,7 @@ async def animate_spaceship(
 
 
 def create_coroutines(rocket_frame_start, rocket_frame_finish, canvas):
+    offset_tics = random.randint(0, 10)
     frame_size = 1
     height, width = canvas.getmaxyx()
     row, column = height - 1, width - 1
@@ -97,7 +97,7 @@ def create_coroutines(rocket_frame_start, rocket_frame_finish, canvas):
         blink(
             canvas, random.randint(frame_size, row - frame_size),
             random.randint(frame_size, column - frame_size),
-            random.choice(SYMBOLS)
+            random.choice(SYMBOLS), offset_tics
         )
         for _ in range(STARS + 1)
     ]
